@@ -26,7 +26,8 @@ namespace lvgl
         }
         catch(const std::exception& e)
         {
-            // std::cerr << e.what() << '\n';
+            std::string detail("Exception in lv_display_flusher: ");
+            Logln(detail + e.what());
         }
     }
 

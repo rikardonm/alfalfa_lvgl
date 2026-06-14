@@ -13,20 +13,17 @@ namespace lvgl
 namespace drivers
 {
     HardwareDisplayDriver::HardwareDisplayDriver(
-        std::shared_ptr<alfalfa::hal::spi::iModule> spi,
+        std::shared_ptr<alfalfa::hal::spi::iSlave> spi,
         std::unique_ptr<::alfalfa::hal::dio::iOutput> dc_pin,
-        std::unique_ptr<::alfalfa::hal::dio::iOutput> chip_select_n,
         std::unique_ptr<::alfalfa::hal::dio::iOutput> rst_pin,
         const PanelConfiguration& panel_config,
         const lv_display_rotation_t rotation)
         : _spi(spi)
         , _dc_pin(std::move(dc_pin))
-        , _chip_select_n(std::move(chip_select_n))
         , _rst_pin(std::move(rst_pin))
         , _panel_config(TransformRotation(rotation, panel_config))
     {
         _dc_pin->Write(false);
-        _chip_select_n->Write(true);
         if (_rst_pin)
         {
             ExecuteHardReset();
@@ -123,24 +120,20 @@ namespace drivers
     void HardwareDisplayDriver::SendCommand(const uint8_t cmd, const uint8_t data)
     {
         _dc_pin->Write(false);
-        _chip_select_n->Write(false);
         _spi->Transceive(cmd);
         _dc_pin->Write(true);
         _spi->Transceive(data);
-        _chip_select_n->Write(true);
     }
 
     void HardwareDisplayDriver::SendCommand(const uint8_t cmd, const std::span<const uint8_t> data)
     {
         _dc_pin->Write(false);
-        _chip_select_n->Write(false);
         _spi->Transceive(cmd);
         if (data.size())
         {
             _dc_pin->Write(true);
             _spi->Transceive(data);
         }
-        _chip_select_n->Write(true);
     }
 
     PanelConfiguration HardwareDisplayDriver::TransformRotation(const lv_display_rotation_t rotation, const PanelConfiguration config)

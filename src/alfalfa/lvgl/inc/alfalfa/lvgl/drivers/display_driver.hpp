@@ -33,9 +33,8 @@ namespace drivers
     {
     public:
         HardwareDisplayDriver(
-            std::shared_ptr<alfalfa::hal::spi::iModule> spi,
+            std::shared_ptr<alfalfa::hal::spi::iSlave> spi,
             std::unique_ptr<::alfalfa::hal::dio::iOutput> dc_pin,
-            std::unique_ptr<::alfalfa::hal::dio::iOutput> chip_select_n,
             std::unique_ptr<::alfalfa::hal::dio::iOutput> rst_pin,
             const PanelConfiguration& panel_config,
             const lv_display_rotation_t rotation = LV_DISPLAY_ROTATION_0);
@@ -54,9 +53,8 @@ namespace drivers
         void SendCommand(const uint8_t cmd, const std::span<const uint8_t> data);
 
     private:
-        std::shared_ptr<alfalfa::hal::spi::iModule> _spi;
+        std::shared_ptr<alfalfa::hal::spi::iSlave> _spi;
         std::unique_ptr<::alfalfa::hal::dio::iOutput> _dc_pin;
-        std::unique_ptr<::alfalfa::hal::dio::iOutput> _chip_select_n;
         std::unique_ptr<::alfalfa::hal::dio::iOutput> _rst_pin;
         const PanelConfiguration _panel_config;
 

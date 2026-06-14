@@ -1,21 +1,23 @@
 #pragma once
 
-#include <alfalfa/lvgl/ui/core/object.hpp>
+#include <alfalfa/lvgl/core/object.hpp>
 
 
 namespace alfalfa
 {
 namespace lvgl
 {
+namespace ui
+{
     class Label : public Object
     {
     public:
-        Label(Object parent, lv_color_t text_color)
+        Label(Object& parent, lv_color_t text_color)
             : Object(lv_label_create(parent))
         {
             SetTextColor(text_color);
         }
-        ~Label() override = default;
+        virtual ~Label() = default;
 
         void SetText(const char* const text)
         {
@@ -37,5 +39,6 @@ namespace lvgl
             lv_obj_set_style_text_font(obj, &font, 0);
         }
     };
+}
 }
 }

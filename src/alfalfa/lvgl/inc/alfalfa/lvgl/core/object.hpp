@@ -12,12 +12,13 @@ namespace lvgl
     class Object
     {
     public:
-        Object(lv_obj_t* const obj_)
-            : obj(obj_)
+        virtual ~Object()
         {
+            lv_obj_delete(obj);
         }
-        virtual ~Object() = default;
+
         operator lv_obj_t*() { return obj; }
+
         operator const lv_obj_t*() const { return obj; }
 
         static Object GetActiveScreen()
@@ -55,7 +56,21 @@ namespace lvgl
             lv_obj_set_pos(obj, x, y);
         }
 
+        void SetSize(const int32_t width, const int32_t height)
+        {
+            lv_obj_set_size(obj, width, height);
+        }
+
     protected:
+        Object(lv_obj_t* const obj_) : obj(obj_) {}
+
+        // Avoid mis-use of the interface, thus deleting the underlying object
+        Object(const Object&) = delete;
+        Object& operator=(const Object&) = delete;
+
+        Object(Object&&) = default;
+        Object& operator=(Object&&) = default;
+
         lv_obj_t* obj = nullptr;
     };
 }

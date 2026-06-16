@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <memory>
 
 #include <lvgl.h>
@@ -18,6 +19,7 @@ namespace lvgl
             std::span<uint8_t> lv_buff,
             std::span<uint8_t> lv_buff_2);
 
+        uint32_t Tick();
     private:
         std::unique_ptr<drivers::HardwareDisplayDriver> _hw_display;
         std::unique_ptr<lv_display_t, void(*)(lv_display_t*)> display;

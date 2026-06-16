@@ -61,5 +61,10 @@ namespace lvgl
         lv_display_set_buffers(display.get(), lv_buff.data(), buffer_2_pointer, lv_buff.size(), LV_DISPLAY_RENDER_MODE_PARTIAL);
         lv_display_set_flush_cb(display.get(), lv_display_flusher);
     }
+
+    uint32_t Display::Tick()
+    {
+        return lv_timer_handler();
+    }
 }
 }

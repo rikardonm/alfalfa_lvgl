@@ -18,6 +18,11 @@ namespace ui
         }
         virtual ~Arc() = default;
 
+        Arc(const Arc&) = delete;
+        Arc& operator=(const Arc&) = delete;
+        Arc(Arc&&) = default;
+        Arc& operator=(Arc&&) = delete;
+
         void SetRotation(int32_t rotation)
         {
             lv_arc_set_rotation(obj, rotation);

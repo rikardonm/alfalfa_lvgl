@@ -26,6 +26,11 @@ namespace ui
             }
         }
         virtual ~Rectangle() = default;
+
+        Rectangle(const Rectangle&) = delete;
+        Rectangle& operator=(const Rectangle&) = delete;
+        Rectangle(Rectangle&&) = default;
+        Rectangle& operator=(Rectangle&&) = delete;
     };
 }
 }

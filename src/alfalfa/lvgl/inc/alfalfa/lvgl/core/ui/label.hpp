@@ -19,6 +19,11 @@ namespace ui
         }
         virtual ~Label() = default;
 
+        Label(const Label&) = delete;
+        Label& operator=(const Label&) = delete;
+        Label(Label&&) = default;
+        Label& operator=(Label&&) = delete;
+
         void SetText(const char* const text)
         {
             lv_label_set_text(obj, text);

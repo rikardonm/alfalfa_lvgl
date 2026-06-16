@@ -14,7 +14,10 @@ namespace lvgl
     public:
         virtual ~Object()
         {
-            lv_obj_delete(obj);
+            if (obj)
+            {
+                lv_obj_delete(obj);
+            }
         }
 
         operator lv_obj_t*() { return obj; }
@@ -68,8 +71,12 @@ namespace lvgl
         Object(const Object&) = delete;
         Object& operator=(const Object&) = delete;
 
-        Object(Object&&) = default;
-        Object& operator=(Object&&) = default;
+        Object(Object&& other)
+        {
+            obj = other.obj;
+            other.obj = nullptr;
+        }
+        Object& operator=(Object&&) = delete;
 
         lv_obj_t* obj = nullptr;
     };

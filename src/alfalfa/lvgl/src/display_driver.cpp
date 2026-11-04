@@ -1,5 +1,6 @@
 #include <alfalfa/lvgl/drivers/display_driver.hpp>
 #include <alfalfa/oal/timekeeper.hpp>
+#include <alfalfa/lib/custom.hpp>
 
 #include <alfalfa/lvgl/drivers/mipi_commands.hpp>
 
@@ -120,19 +121,19 @@ namespace drivers
     void HardwareDisplayDriver::SendCommand(const uint8_t cmd, const uint8_t data)
     {
         _dc_pin->Write(false);
-        _spi->Transceive(cmd);
+        _spi->Transmit(std::byte{cmd});
         _dc_pin->Write(true);
-        _spi->Transceive(data);
+        _spi->Transmit(std::byte{data});
     }
 
     void HardwareDisplayDriver::SendCommand(const uint8_t cmd, const std::span<const uint8_t> data)
     {
         _dc_pin->Write(false);
-        _spi->Transceive(cmd);
+        _spi->Transmit(std::byte{cmd});
         if (data.size())
         {
             _dc_pin->Write(true);
-            _spi->Transceive(data);
+            _spi->Transmit(alfalfa::lib::AsBytes(data));
         }
     }
 

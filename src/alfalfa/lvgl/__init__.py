@@ -8,25 +8,26 @@ _cd = lobs.Path(__file__).parent
 _s = _cd / "src"
 
 
-class LvglOptions:
-    refresh_period = lobs.Parameter[float](default=0.033)
+class LvglOptions(lobs.ParameterGroup):
+    refresh_period = lobs.Parameter[float](default=1/30)
     """The desired refresh period for the LVGL library, in seconds.
     The default value is 0.033 seconds, which corresponds to a refresh rate of 30 Hz."""
 
 
+_target_version = lobs.Version(9, 5, 0)
+
+
 class Lvgl(
     lobs.Package,
-    version=lobs.Version(9, 5, 0),
+    version=_target_version,
     tag="lvgl",
 ):
     options = LvglOptions()
+    # Use a variable enabling manual override of the package source
+    provider = lobs.providers.GitRepoPackage("https://github.com/lvgl/lvgl", f"v{_target_version}")
 
     def _prepare_files(self, basepath: lobs.Path):
-        _provider = lobs.providers.GitRepoPackage(
-            "https://github.com/lvgl/lvgl",
-            f"v{self.version}",
-        )
-        _provider.resolve_to(basepath)
+        self.provider.resolve_to(basepath)
 
     def _make_project(self, basepath: lobs.Path):
         return lobs.exporters.cmake.CmakeBasedProject()
